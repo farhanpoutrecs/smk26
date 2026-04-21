@@ -1,0 +1,38 @@
+{
+  "summary": "Tournament module (Kumpulan + Kalah Mati) verified end-to-end. Backend: 29/29 new tournament tests PASSED (auth guards, CSV imports for teams & fixtures, live/finished transitions, auto-winner computation, standings P/W/D/L/GF/GA/GD/Pts, bracket grouping, sport config persistence, CSV fixture export) + 24/24 regression tests (products, registrations, orders, treasure-hunt, admin stats/exports, auth) — 53/53 overall. Frontend: /sports/bola-sepak renders all 5 tabs (Live, Kumpulan, Jadual, Bracket, Keputusan) each navigable via data-testid; /scoreboard shows live section + 15 sport cards; /admin (with injected session cookie) shows the new 'Buka Tournament Manager' CTA (testid=go-tournament-admin); /admin/tournament/bola-sepak renders all 4 admin tabs (Pasukan(8), Jadual(3), Live Scoring, Konfigurasi) with CSV import textarea, Add team form, team rows, native/sheet mode select, Simpan. Standings correctness confirmed via API (DOA W=1 Pts=3 GF=2 GA=1 GD=1; FAMA L=1 Pts=0 GF=1 GA=2 GD=-1).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_tournament.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/tournament_results.xml"
+  ],
+  "action_items": [
+    "(Optional) Add a data-testid='admin-live' wrapper in TournamentAdmin Live Scoring tab for consistency (Pasukan→admin-teams, Jadual→admin-fixtures, Konfigurasi→admin-config all exist; only admin-live is missing). Current behaviour works — just a testability polish.",
+    "(Carryover from iteration 1, pre-existing) React dev-mode hydration warning '<span> cannot be a child of <option>' fires on TournamentAdmin.jsx:153 when rendering dynamic group options (A/B/C/D). Comes from the source-map wrapper around array-mapped children; cosmetic only, does not affect prod build or functionality."
+  ],
+  "critical_code_review_comments": [
+    "server.py tournament endpoints correctly gate all mutating routes behind require_admin; public read endpoints are open as intended.",
+    "PATCH /tournament/matches/{id} auto-sets winner only when status==finished AND winner not supplied — matches spec; draws leave winner=None which is correct for group stage.",
+    "get_groups standings sort tiebreakers (Pts desc, GD desc, GF desc, name asc) correctly implemented.",
+    "import_teams_csv / import_fixtures_csv use csv.DictReader on raw request body — good. Consider validating round enum (group|QF|SF|F|3P) and group enum (A|B|C|D) to reject malformed rows, currently silently ignored only if team_a/team_b missing.",
+    "sport_configs collection is upserted correctly; default returned when absent via in-memory SportConfig fallback — good UX.",
+    "CORS still uses '*' with allow_credentials=True (flagged in iteration 1); unchanged. Must tighten before prod.",
+    "ALLOW_ALL_ADMINS=True still on (MVP mode) — must flip for prod launch.",
+    "No pagination on fixtures/teams list (caps at 500/2000 .to_list) — fine for MVP scale (<=16 teams per sport, <=30 matches per sport)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_tournament.py"
+  ],
+  "success_rate": {"backend": "100% (53/53)", "frontend": "100% on sampled flows"},
+  "test_credentials": "Admin session token 'test_session_smk26_2026' still valid in MongoDB user_sessions for admin+test@poutrecs.com. Used both as Authorization: Bearer header (backend) and session_token cookie with sameSite=None secure=True (frontend admin).",
+  "seed_data_creation": "test_tournament.py creates a unique sport_id per run (pattern 'testsport-XXXXXX') and cleans up teams + matches on teardown. No permanent test pollution. Pre-existing smoke-test data for 'bola-sepak' (8 teams, 3 fixtures incl. 1 finished DOA 2-1 FAMA) remains and was observed in admin UI.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Tournament module fully covered by /app/backend/tests/test_tournament.py. For future UI tests of admin tournament manager, inject cookie via page.context.add_cookies with sameSite='None' and secure=True BEFORE navigating. Admin tab testids: admin-tourn-tab-teams, admin-tourn-tab-fixtures, admin-tourn-tab-live, admin-tourn-tab-config. Body containers: admin-teams, admin-fixtures, admin-config (admin-live missing — minor). Sport-detail public tabs: tab-live, tab-groups, tab-fixtures, tab-bracket, tab-results.",
+  "rca of the issue": "No unresolved bugs. Only one minor testability polish item (missing admin-live testid wrapper) and one pre-existing cosmetic dev-mode hydration warning."
+}

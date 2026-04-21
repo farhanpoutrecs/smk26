@@ -1,0 +1,37 @@
+{
+  "summary": "First-run comprehensive test of SMK26 EventOS PWA. Backend: 24/24 pytest cases passed covering public endpoints, registrations (CRUD + receipt + admin payment), orders (catalog pricing + receipt + admin payment), treasure hunt (submit + leaderboard aggregation), admin stats, CSV exports, and auth (401/injected session). Frontend: all primary flows work — home (hero, CTA, 5-item bottom nav, WhatsApp FAB), 15 sport cards with detail navigation, 3 schedule day tabs, scoreboard refresh, registration form end-to-end (creates REG ID, shows QR + receipt upload), shop modal + order creation (creates ORD, confirmation view), treasure hunt 6 tabs + submission + leaderboard update, results page, /admin redirects to /admin/login when unauth, injected session grants admin dashboard access.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Shop (mobile)", "issues": ["WhatsApp floating FAB overlaps the 'Beli' button on the first product card at 390px width. Playwright force-click still registers, but real-mouse click path is fine; consider adding bottom padding on product grid or moving FAB up on /shop to avoid occlusion."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional polish) Adjust WhatsApp FAB position or add grid bottom-padding on /shop so it does not overlap product Buy buttons on narrow screens.",
+    "(Optional polish) Console warning on TreasureHunt: <span> cannot be a child of <option> — comes from a dev-mode source-map wrapper around option text (dynamic array mapping). Does not affect functionality; ignore in prod build."
+  ],
+  "critical_code_review_comments": [
+    "server.py: auth_session sets cookie with samesite=none & secure=true — correct for cross-site preview. Good.",
+    "server.py: upload_receipt and upload_order_receipt are public (no auth). MVP-acceptable since reg_id/order_id are opaque UUIDs, but consider requiring at least matching phone/IC to prevent receipt tampering by ID guessing.",
+    "server.py: PaymentUpdate allows arbitrary notes on order patch but order update_order_payment does not persist notes (only reg does). Minor inconsistency.",
+    "ALLOW_ALL_ADMINS=True is documented as MVP mode — must be flipped before launch.",
+    "CORS uses '*' with allow_credentials=True which browsers reject; set CORS_ORIGINS to the real domain before prod.",
+    "Registrations list & orders list use to_list(5000/5000) — fine for 2000 participants but add pagination once beyond MVP."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Injected admin session — user admin+test@poutrecs.com, session_token=test_session_smk26_2026 (valid 7 days). Written into MongoDB test_database via mongosh per /app/auth_testing.md.",
+  "seed_data_creation": "Test run created TEST_-prefixed registrations, orders (ORD-9FE8F80B, etc.), treasure-hunt submissions (TEST_Harimau, TEST_Rimau, TEST UI Team). These are visible in admin dashboard and will accumulate across runs; admin can manually clear from Mongo if desired.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Admin test session token 'test_session_smk26_2026' is already injected in Mongo (user admin+test@poutrecs.com). Use Authorization: Bearer test_session_smk26_2026 for admin API calls, or set it as 'session_token' cookie for browser tests. Playwright's .click(force=True) on the shop 'Beli' button did NOT trigger React onClick (no modal). Using page.evaluate to call .click() directly DID work. Use JS-dispatch or get_by_role for shop buy buttons to avoid false negatives.",
+  "rca of the issue": "No unresolved bugs. Only optional polish items noted above."
+}

@@ -1,0 +1,100 @@
+{
+  "project_name": "Kejohanan Sukan Kementerian, Jabatan & Agensi KPKM 2026 (SMK26)",
+  "app_type": "mobile-first PWA web platform",
+  "theme": {
+    "mode": "dark",
+    "archetype": "Archetype 2: The Performance Pro (Elite Athleticism & Precision)",
+    "rationale": "High-energy command-center feel suitable for a dynamic sports event. Balances government professionalism via strict grids with sporty kinetic energy via high-contrast neon accents.",
+    "colors": {
+      "background": "#0A0A0A",
+      "surface": "#12141A",
+      "surface_elevated": "#1A1D24",
+      "primary": "#00D4AA",
+      "primary_hover": "#22C55E",
+      "secondary": "#F97316",
+      "secondary_hover": "#EA580C",
+      "border": "#2D3342",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#94A3B8",
+      "error": "#EF4444",
+      "success": "#10B981"
+    },
+    "typography": {
+      "headings_font": "Barlow Condensed",
+      "body_font": "Outfit",
+      "rules": {
+        "h1": "text-5xl lg:text-6xl font-black tracking-tight uppercase",
+        "h2": "text-3xl lg:text-4xl font-bold tracking-tight uppercase",
+        "body": "text-base font-normal tracking-wide leading-relaxed",
+        "overline": "text-xs font-bold tracking-[0.2em] uppercase text-primary"
+      }
+    },
+    "surfaces": {
+      "cards": "Flat solid backgrounds (#12141A) with 1px solid border (#2D3342), no soft shadows. Use sharp 4px or 8px border-radius (rounded-md/rounded-lg max).",
+      "glass": "Crystal Glass pattern for sticky headers/bottom nav: backdrop-blur-xl bg-[#0A0A0A]/80 border-b/border-t border-[#2D3342]."
+    }
+  },
+  "layout_rules": {
+    "mobile_first": "Crucial. All layouts must prioritize touch targets (min 48x48px) and readable text on small screens. Use generous padding (p-4 to p-6).",
+    "grid_system": "Bento 'Control Room' grid for dashboards and sports cards. Strict hierarchy. Use gap-4 or gap-6. Make elements fill their grid cells (h-full).",
+    "spacing": "Generous spacing. Use pb-24 on main content to avoid overlap with bottom navigation bar."
+  },
+  "components": {
+    "navigation": {
+      "bottom_nav": "Fixed bottom-0 left-0 right-0 z-50. 5 icons (Home, Sports, Scoreboard, Shop, More). Active state uses text-primary and subtle top border highlight.",
+      "top_header": "Sticky top-0 z-40. Contains logo and floating WhatsApp CTA."
+    },
+    "buttons": {
+      "primary": "bg-primary text-[#0A0A0A] font-bold px-6 py-3 rounded-md hover:bg-primary_hover transition-colors shadow-[0_0_15px_rgba(0,212,170,0.3)]",
+      "secondary": "bg-secondary text-white font-bold px-6 py-3 rounded-md hover:bg-secondary_hover transition-colors",
+      "floating_action": "WhatsApp floating button uses solid secondary color (#F97316) for urgency/contact."
+    },
+    "badges": {
+      "UNPAID": "bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-1 text-xs rounded",
+      "PENDING": "bg-orange-500/10 text-orange-500 border border-orange-500/20 px-2 py-1 text-xs rounded",
+      "PAID": "bg-green-500/10 text-green-500 border border-green-500/20 px-2 py-1 text-xs rounded"
+    },
+    "icons": "Use @phosphor-icons/react for sharp, high-legibility athletic/technical icons.",
+    "testing": "All interactive elements (buttons, links, form inputs) MUST include data-testid attribute formatted as kebab-case role-based (e.g., data-testid='bottom-nav-home', data-testid='submit-registration-btn')."
+  },
+  "module_specific_guidelines": {
+    "home": "Parallax scrolling hero overlaying cinematic dark background. Heavy use of primary green and secondary orange for CTAs.",
+    "sports_listing": "15 cards in a compact bento grid. Each card displays sport icon, title, and 'Daftar'/'Jadual' quick links.",
+    "schedule": "Vertical timeline view. High contrast, using green/orange dots to indicate active/upcoming events.",
+    "treasure_hunt": "Gamified aesthetic. Map-like background. Big, bold, glowing typography for checkpoints and leaderboard.",
+    "eshop": "Product focus. Dark background makes the metallic medals pop. Bold 'Beli Sekarang' buttons.",
+    "admin_dashboard": "Data-dense. 1px borders, compact Shadcn tables. Neutral gray text with green/orange status highlights."
+  },
+  "media_urls": {
+    "hero_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/cc4ea78b-0e96-4cb1-8140-80a8127210a4/images/3ad57717315ce5ecb14a46b370093b6d5a2a2f854676df31d08a953a1074b26a.png",
+      "description": "Cinematic dark background with aggressive energetic neon green and electric orange geometric light trails."
+    },
+    "treasure_hunt_map": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/cc4ea78b-0e96-4cb1-8140-80a8127210a4/images/45463ca105cb35464b727245d958acd21526b02873b6de8f5ac2ef259fea4bf8.png",
+      "description": "Abstract 3D topographical map with glowing orange and green routing lines over matte black surface."
+    },
+    "eshop_medal_preview": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/cc4ea78b-0e96-4cb1-8140-80a8127210a4/images/65609957ee1c8d2b312741cc07f5277bae779005afc80d6093ef3d2be5a23de6.png",
+      "description": "Premium sports finisher medal with neon green and orange glowing accents."
+    },
+    "sports_generic_1": {
+      "url": "https://images.pexels.com/photos/19146676/pexels-photo-19146676.jpeg",
+      "description": "Group of athletes running on outdoor track in evening."
+    },
+    "podium_results": {
+      "url": "https://images.pexels.com/photos/7267573/pexels-photo-7267573.jpeg",
+      "description": "Three medals on podium blocks symbolizing winner awards."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install necessary font dependencies (@fontsource/barlow-condensed, @fontsource/outfit).",
+    "Install @phosphor-icons/react for the icon set.",
+    "Implement the 'Dark Mode only' theme overriding standard light styles. Ensure HTML/Body has bg-[#0A0A0A] and text-white.",
+    "Use raw HTML/Tailwind for marketing/home layouts to allow aggressive asymmetry, but use Shadcn for Admin Dashboard, forms, and tables.",
+    "Ensure the bottom navigation has z-index 50 and padding is applied to the main layout bottom to prevent content masking.",
+    "Never use placeholders for images. Use the precise URLs provided in the media_urls block.",
+    "Remember to include data-testid on all interactive elements as explicitly defined in testing rules.",
+    "Ensure 'Bahasa Malaysia sahaja' instruction is followed across all text."
+  ]
+}
