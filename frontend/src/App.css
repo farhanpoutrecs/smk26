@@ -1,0 +1,5 @@
+.App {
+    min-height: 100vh;
+    background: var(--smk-bg);
+    color: var(--smk-text);
+}
